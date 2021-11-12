@@ -1,0 +1,47 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+spring:
+  thymeleaf:
+    enabled: true
+    encoding: UTF-8
+    prefix: classpath:/templates/
+    suffix: .html
+
+  datasource:
+    url: jdbc:h2:file:C:/src/data/post
+    driver-class-name: org.h2.Driver
+    username: qw
+    password:
+
+  h2:
+    console:
+      enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update #create update none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
+
+file:
+  path: C:/src/project/fileTest/src/main/resources/templates/uploads/
+
+cloud:
+  aws:
+    credentials:
+      accessKey: AKIAWMT46ZUOY6YC24FN
+      secretKey: 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
+    s3:
+      bucket: jap-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false

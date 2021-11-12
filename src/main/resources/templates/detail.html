@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="@{'게시판 - ' + ${boardDTO.title}}"></title>
+</head>
+<body>
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title" th:text="@{${boardDTO.title} + ' - ' + ${boardDTO.author}}"></h5>
+            <p class="card-text" th:text="${boardDTO.content}"></p>
+            <div th:if="${boardDTO.fileDTO != null}">
+                <strong>첨부파일 : </strong>
+                <a class="card-text" th:href="@{'/download/' + ${boardDTO.fileDTO.id}}" th:text="${boardDTO.fileDTO.oriFileName}"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+</body>
+</html>

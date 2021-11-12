@@ -20,8 +20,8 @@ public class BoardController {
     private final BoardService boardService;
 
     @PostMapping("/board/save")
-    public String save(BoardSaveDTO boardSaveDTO, HttpServletRequest request) throws IOException {
-        BoardDTO boardDTO = boardService.save(boardSaveDTO, request); // 성공 실패 분기 해줘야함
+    public String save(BoardSaveDTO boardSaveDTO) throws IOException {
+        BoardDTO boardDTO = boardService.save(boardSaveDTO); // 성공 실패 분기 해줘야함
         return "redirect:/board/detail/"+boardDTO.getId();
     }
 

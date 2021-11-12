@@ -33,23 +33,20 @@ import java.nio.file.Paths;
 public class FileController {
 
     private final FileService fileService;
-    private final AmazonS3 amazonS3;
+    private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     @GetMapping("/download/{id}")
     public ResponseEntity<?> fileDownload(@PathVariable Integer id) throws IOException {
-        System.out.println(id);
         FileDTO fileDTO = fileService.getFile(id);
-        System.out.println(fileDTO.getFileName());
         String storedFileName = fileDTO.getDirectory()+fileDTO.getFileName();
-        System.out.println(storedFileName);
-        S3Object o = amazonS3.getObject(new GetObjectRequest(bucket, storedFileName));
+        S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket, storedFileName));
         S3ObjectInputStream objectInputStream = o.getObjectContent();
         byte[] bytes = IOUtils.toByteArray(objectInputStream);
 
-        String fileName = URLEncoder.encode(storedFileName, "UTF-8").replaceAll("\\+", "%20");
+        String fileName = URLEncoder.encode(fileDTO.getOriFileName(), "UTF-8").replaceAll("\\+", "%20");
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         httpHeaders.setContentLength(bytes.length);

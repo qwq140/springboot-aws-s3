@@ -35,9 +35,14 @@ public class BoardService {
     private final S3Uploader s3Uploader;
 
     @Transactional
-    public BoardDTO save(BoardSaveDTO boardSaveDTO, HttpServletRequest request) throws IOException {
+    public BoardDTO save(BoardSaveDTO boardSaveDTO) throws IOException {
 
-        FileEntity fileEntity = s3Uploader.upload(boardSaveDTO.getFile(),"static", boardSaveDTO);
+        BoardEntity boardEntity = boardSaveDTO.toEntity();
+        if(boardSaveDTO.getFile()!=null){
+            FileEntity fileEntity = s3Uploader.upload(boardSaveDTO.getFile(),"static", boardSaveDTO);
+            boardEntity.setFileEntity(fileRepository.save(fileEntity));
+        }
+
 
 //        String now = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
 //        String oriFileName = boardSaveDTO.getFile().getOriginalFilename();
@@ -58,10 +63,6 @@ public class BoardService {
 //                .extension(extension)
 //                .build();
 
-        FileEntity fileEntity1 = fileRepository.save(fileEntity);
-
-        BoardEntity boardEntity = boardSaveDTO.toEntity();
-        boardEntity.setFileEntity(fileEntity1);
         return boardRepository.save(boardEntity).toDTO();
     }
 
